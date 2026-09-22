@@ -177,3 +177,40 @@ plt.savefig("images/rolling_volatility.png", dpi=150)
 plt.show()
 
 normalized = close / close.iloc[0] * 100
+
+# 60일 이동 상관관계 계산
+rolling_correlation = returns["Tesla"].rolling(window=60).corr(
+    returns["Hyundai"]
+)
+
+print("\n[27] 60일 이동 상관관계")
+print(rolling_correlation.tail())
+
+# 60일 이동 상관관계 시각화
+plt.figure(figsize=(12, 6))
+
+plt.plot(
+    rolling_correlation.index,
+    rolling_correlation,
+    label="Tesla-Hyundai"
+)
+
+plt.axhline(
+    y=0,
+    linestyle="--"
+)
+
+plt.title("60-Day Rolling Correlation")
+plt.xlabel("Date")
+plt.ylabel("Correlation")
+plt.ylim(-1, 1)
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+
+plt.savefig(
+    "images/rolling_correlation.png",
+    dpi=150
+)
+
+plt.show()
