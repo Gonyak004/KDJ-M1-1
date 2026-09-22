@@ -214,3 +214,77 @@ plt.savefig(
 )
 
 plt.show()
+
+tesla_ma20 = close["Tesla"].rolling(window=20).mean()
+tesla_ma60 = close["Tesla"].rolling(window=60).mean()
+
+hyundai_ma20 = close["Hyundai"].rolling(window=20).mean()
+hyundai_ma60 = close["Hyundai"].rolling(window=60).mean()
+
+print("\n[28] 이동평균")
+print("Tesla 20일 이동평균:")
+print(tesla_ma20.tail())
+
+print("\nTesla 60일 이동평균:")
+print(tesla_ma60.tail())
+
+plt.figure(figsize=(12, 6))
+
+plt.plot(
+    close.index,
+    close["Tesla"],
+    label="Tesla"
+)
+
+plt.plot(
+    close.index,
+    tesla_ma20,
+    label="Tesla 20-Day MA"
+)
+
+plt.plot(
+    close.index,
+    tesla_ma60,
+    label="Tesla 60-Day MA"
+)
+
+plt.title("Tesla Price and Moving Averages")
+plt.xlabel("Date")
+plt.ylabel("Price")
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+
+plt.savefig(
+    "images/moving_average.png",
+    dpi=150
+)
+
+plt.show()
+
+
+# ==========================================
+# 시계열 분해
+# ==========================================
+
+from statsmodels.tsa.seasonal import seasonal_decompose
+
+tesla_price = close["Tesla"].asfreq("B").interpolate()
+
+decomposition = seasonal_decompose(
+    tesla_price,
+    model="additive",
+    period=5
+)
+
+fig = decomposition.plot()
+fig.set_size_inches(12, 10)
+
+plt.tight_layout()
+
+plt.savefig(
+    "images/tesla_decomposition.png",
+    dpi=150
+)
+
+plt.show()
